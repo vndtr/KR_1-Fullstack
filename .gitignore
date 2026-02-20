@@ -1,3 +1,35 @@
-# macOS
+
+# Зависимости 
+node_modules/
+frontend/node_modules/
+
+# Служебные файлы редакторов и ОС
+.vscode/
+.idea/
+*.swo
+*.swp
+*.swn
 .DS_Store
-**/.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+*.log
+
+# Скомпилированные файлы (можно оставить, но не обязательно)
+*.css.map
+*.map
+frontend/public/*.map
+
+# Локальные настройки
+.env
+.env.local
+.env.*.local
+
+# Папки с сборками (если есть)
+dist/
+build/
+
+# Временные файлы
+*.tmp
+*.temp
+*.cache

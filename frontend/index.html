@@ -3,37 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Практика 1 — карточка товара (SCSS)</title>
-
-    <!-- Результат компиляции SCSS -->
+    <title>Книжный магазин</title>
     <link rel="stylesheet" href="./public/main.css" />
   </head>
   <body>
     <main class="page">
       <article class="product-card product-card--accent">
-        <div class="product-card__image" aria-hidden="true"></div>
+        <div class="product-card__image" >
+           <img src="" alt="Кафка на пляже">
+        </div>
 
         <div class="product-card__content">
-          <h1 class="product-card__title">Наушники ProSound</h1>
+          <h1 class="product-card__title">"Кафка на пляже" Харуки Мураками</h1>
           <p class="product-card__desc">
-            Лёгкие, удобные, с хорошей шумоизоляцией. Пример карточки для практики.
+            Кафка на пляже — мистический роман японского писателя Харуки Мураками, издан в 2002 году. В центре произведения — судьба подростка, убежавшего из дома от мрачного пророчества своего отца. На удивительные судьбы героев, жителей Японии второй половины XX века, влияют пророчества, посланцы потустороннего мира и кошки.
           </p>
 
           <div class="product-card__footer">
-            <span class="product-card__price">4 990 ₽</span>
+            <span class="product-card__price">990 ₽</span>
             <a class="btn" href="#">Купить</a>
           </div>
         </div>
       </article>
-
-      <section class="note">
-        <h2 class="note__title">Что нужно сделать студенту</h2>
-        <ol class="note__list">
-          <li>Изменить карточку под свой товар.</li>
-          <li>Добавить минимум 2 переменные, 1 миксин, вложенность.</li>
-          <li>Скомпилировать SCSS в CSS (папка <code>public/</code>).</li>
-        </ol>
-      </section>
     </main>
+     <script src="./main.js"></script>
   </body>
 </html>
