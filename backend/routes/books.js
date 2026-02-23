@@ -1,124 +1,82 @@
 const express = require("express");
 const router = express.Router();
+const { nanoid } = require("nanoid");
 
-let books = require("../data/books");
+const path = require("path");
+const booksPath = path.join(__dirname, "../data/books.js");
+let books = require(booksPath);
 
-// Вспомогательная функция: найти книгу по id
-function findById(id) {
-  const num = Number(id);
-  if (Number.isNaN(num)) return null;
-  return books.find((b) => b.id === num) || null; 
-}
-
-// GET /api/books — список книг
+// GET /api/books
 router.get("/", (req, res) => {
-  res.json(books);  
+  res.json(books);
 });
 
-// GET /api/books/:id — одна книга
+// GET /api/books/:id
 router.get("/:id", (req, res) => {
-  const book = findById(req.params.id);
-  if (!book) return res.status(404).json({ error: "Книга не найдена" });
+const book = findById(req.params.id);
+  
+  if (!book) {
+    return res.status(404).json({ error: "Книга не найдена" });
+  }
+  
   res.json(book);
 });
 
-// POST /api/books — добавить книгу
+// POST /api/books
 router.post("/", (req, res) => {
- 
-  const { title, author, description, price, image, year, genre } = req.body;
-
-  // Валидация
-  if (!title || typeof title !== "string" || title.trim() === "") {
-    return res.status(400).json({ error: "Название книги обязательно" });
-  }
-  
-  const numPrice = Number(price);
-  if (Number.isNaN(numPrice) || numPrice < 0) {
-    return res.status(400).json({ error: "Цена должна быть положительным числом" });
+ const { title, author, category, description, price, stock, rating, image } = req.body;
+  if (!title || !price) {
+    return res.status(400).json({ error: "Название и цена обязательны" });
   }
 
-  // Вычисляем новый id
-  const nextId = books.length ? Math.max(...books.map(b => b.id)) + 1 : 1;
+ const newId = books.length > 0 ? Math.max(...books.map(b => b.id)) + 1 : 1;
   
-  // Создаем новую книгу
-  const newBook = {
-    id: nextId,
-    title: title.trim(),
+ const newBook = {
+    id: newId,
+    title,
     author: author || "Неизвестен",
+    category: category || "другое",
     description: description || "",
-    price: numPrice,
-    image: image || "/images/default.jpg",
-    year: year || null,
-    genre: genre || "другое"
+    price: Number(price),
+    stock: stock || 0,
+    rating: rating || 0,
+    image: image || "/images/default.jpg"
   };
 
   books.push(newBook);
   res.status(201).json(newBook);
 });
 
-// PATCH /api/books/:id — обновить книгу
+// PATCH /api/books/:id
 router.patch("/:id", (req, res) => {
-  const book = findById(req.params.id);
+  const id = parseInt(req.params.id);
+  const book = books.find(b => b.id === id);
+
   if (!book) return res.status(404).json({ error: "Книга не найдена" });
 
-  const { title, author, description, price, image, year, genre } = req.body;
+  const { title, author, category, description, price, stock, rating, image } = req.body;
 
-  // Обновляем только те поля, которые передали
-  if (title !== undefined) {
-    if (typeof title !== "string" || title.trim() === "") {
-      return res.status(400).json({ error: "Название должно быть непустой строкой" });
-    }
-    book.title = title.trim();
-  }
-
-  if (author !== undefined) {
-    book.author = author;
-  }
-
-  if (description !== undefined) {
-    book.description = description;
-  }
-
-  if (price !== undefined) {
-    const numPrice = Number(price);
-    if (Number.isNaN(numPrice) || numPrice < 0) {
-      return res.status(400).json({ error: "Цена должна быть числом >= 0" });
-    }
-    book.price = numPrice;
-  }
-
-  if (image !== undefined) {
-    book.image = image;
-  }
-
-  if (year !== undefined) {
-    book.year = year;
-  }
-
-  if (genre !== undefined) {
-    book.genre = genre;
-  }
+  if (title) book.title = title;
+  if (author) book.author = author;
+  if (category) book.category = category;
+  if (description) book.description = description;
+  if (price) book.price = Number(price);
+  if (stock !== undefined) book.stock = stock;
+  if (rating) book.rating = rating;
+  if (image) book.image = image;
 
   res.json(book);
 });
 
-// DELETE /api/books/:id — удалить книгу
+// DELETE /api/books/:id
 router.delete("/:id", (req, res) => {
-  const before = books.length;
-  const id = Number(req.params.id);
+  const id = parseInt(req.params.id);
+  const index = books.findIndex(b => b.id === id);
+  if (index === -1) return res.status(404).json({ error: "Книга не найдена" });
   
-  if (Number.isNaN(id)) {
-    return res.status(400).json({ error: "ID должен быть числом" });
-  }
-
-  
-  books = books.filter(b => b.id !== id);
-
-  if (books.length === before) {
-    return res.status(404).json({ error: "Книга не найдена" });
-  }
-
-  res.json({ ok: true, message: "Книга удалена" });
+  books.splice(index, 1);
+  res.status(204).send();
 });
 
 module.exports = router;
+
