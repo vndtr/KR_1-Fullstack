@@ -1,16 +1,19 @@
-# Практика 2 — Express CRUD API
+# Книжный магазин 
 
-## Команды
+##  Описание проекта
+Интернет-магазин книг, реализованный на React и Express. Приложение поддерживает полный CRUD (создание, чтение, обновление, удаление) для управления книгами. Данные хранятся в оперативной памяти. API документирован с помощью Swagger (OpenAPI).
+
+## Запуск проекта
+
+### Бэкенд
 ```bash
-npm i
-npm run dev
+cd backend
+npm install
+node app.js
 ```
 
-## Эндпоинты
-- GET `/api/products`
-- GET `/api/products/:id`
-- POST `/api/products`
-- PATCH `/api/products/:id`
-- DELETE `/api/products/:id`
-
-Откройте `api.http` для примеров запросов.
+### Фронтенд
+```bash
+cd frontend-books
+npm install
+npm start
